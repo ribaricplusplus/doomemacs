@@ -46,12 +46,14 @@
 
 (use-package! js-mode
   :defer t
+  :mode ("\\.js\\'" . js-mode)
   :init
   (+javascript-common-config 'js-mode))
 
 (use-package! js-ts-mode
   :defer t
   :when (modulep! +tree-sitter)
+  :mode ("\\.js\\'" . js-ts-mode)
   :init
   (set-tree-sitter!
       'js-mode
@@ -79,6 +81,7 @@
 (use-package! tsx-ts-mode
   :defer t
   :when (modulep! +tree-sitter)
+  :mode ("\\.tsx\\'" . tsx-ts-mode)
   :init
   ;; This hook is not defined automatically so we define it here.
   (message "Hello world from tsx")
