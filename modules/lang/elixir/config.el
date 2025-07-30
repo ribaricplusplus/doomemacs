@@ -46,12 +46,7 @@
     (after! lsp-mode
       (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]_build\\'")))
   :config
-  (+elixir-common-config 'elixir-mode)
-
-  (after! highlight-numbers
-    (puthash 'elixir-mode
-             "\\_<-?[[:digit:]]+\\(?:_[[:digit:]]\\{3\\}\\)*\\_>"
-             highlight-numbers-modelist)))
+  (+elixir-common-config 'elixir-mode))
 
 
 (use-package! elixir-ts-mode
