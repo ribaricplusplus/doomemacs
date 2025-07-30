@@ -43,6 +43,7 @@
     (treesit-ensure-installed ts-symbol)))
 
 (use-package! js-mode
+  :defer t
   :config
   (+javascript-common-config 'js-mode))
 
