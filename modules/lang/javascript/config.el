@@ -40,20 +40,49 @@
 ;; Make sure that treesitter grammar gets installed with set-tree-sitter! and that fallbacks are provided.
 ;;
 
-(defun +javascript-common-config (mode)
+(defun +javascript-common-config (mode &optional ts-symbol)
   (when (modulep! +lsp)
     (add-hook (intern (format "%s-local-vars-hook" mode)) #'lsp! 'append))
-  (set-repl-handler! 'mode #'+javascript/open-repl))
+  (set-repl-handler! mode #'+javascript/open-repl)
+  (when ts-symbol
+    (treesit-ensure-installed ts-symbol)))
+
+(use-package! js-mode
+  :config
+  (+javascript-common-config 'js-mode))
+
+(use-package! js-ts-mode
+  :defer t
+  :when (modulep! +tree-sitter)
+  (set-tree-sitter!
+      'js-mode
+      'js-ts-mode
+    '((javascript :url "https://github.com/tree-sitter/tree-sitter-javascript"
+       :rev "master"
+       :source-dir "src")))
+  (+javascript-common-config 'js-ts-mode))
 
 (use-package! typescript-ts-mode
   :when (modulep! +tree-sitter)
-  :when (fboundp 'typescript-ts-mode)
   :config
-  (+javascript-common-config 'typescript-ts-mode)
-  (set-tree-sitter! 'typescript-mode 'typescript-ts-mode 'typescript))
+  (cl-pushnew '(typescript
+                "https://github.com/tree-sitter/tree-sitter-typescript"
+                "master"
+                "typescript/src"
+                nil
+                nil)
+              treesit-language-source-alist :test #'eq :key #'car)
+  (+javascript-common-config 'typescript-ts-mode 'typescript))
 
 (use-package! tsx-ts-mode
   :when (modulep! +tree-sitter)
-  :when (fboundp 'tsx-ts-mode)
   :config
-  (+javascript-common-config 'tsx-ts-mode))
+  (cl-pushnew '(tsx
+                "https://github.com/tree-sitter/tree-sitter-typescript"
+                "master"
+                "tsx/src"
+                nil
+                nil)
+              treesit-language-source-alist :test #'eq :key #'car)
+  (+javascript-common-config 'tsx-ts-mode 'tsx)
+  (treesit-ensure-installed 'tsx))
