@@ -82,6 +82,7 @@
   :defer t
   :when (modulep! +tree-sitter)
   :mode ("\\.tsx\\'" . tsx-ts-mode)
+  :mode ("\\.jsx\\'" . tsx-ts-mode)
   :init
   ;; This hook is not defined automatically so we define it here.
   (message "Hello world from tsx")
