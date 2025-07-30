@@ -47,6 +47,9 @@
 (use-package! js-mode
   :defer t
   :mode ("\\.js\\'" . js-mode)
+  :mode ("\\.mjs\\'" . js-mode)
+  :mode ("\\.cjs\\'" . js-mode)
+  :mode ("\\.es\\'" . js-mode)
   :init
   (+javascript-common-config 'js-mode))
 
@@ -54,6 +57,9 @@
   :defer t
   :when (modulep! +tree-sitter)
   :mode ("\\.js\\'" . js-ts-mode)
+  :mode ("\\.mjs\\'" . js-ts-mode)
+  :mode ("\\.cjs\\'" . js-ts-mode)
+  :mode ("\\.es\\'" . js-ts-mode)
   :init
   (set-tree-sitter!
       'js-mode
@@ -67,6 +73,8 @@
   :defer t
   :when (modulep! +tree-sitter)
   :mode ("\\.ts\\'" . typescript-ts-mode)
+  :mode ("\\.mts\\'" . typescript-ts-mode)
+  :mode ("\\.cts\\'" . typescript-ts-mode)
   :init
   (+javascript-common-config 'typescript-ts-mode 'typescript)
   (with-eval-after-load 'treesit
@@ -84,7 +92,6 @@
   :mode ("\\.tsx\\'" . tsx-ts-mode)
   :mode ("\\.jsx\\'" . tsx-ts-mode)
   :init
-  ;; This hook is not defined automatically so we define it here.
   (+javascript-common-config 'tsx-ts-mode 'tsx)
   (with-eval-after-load 'treesit
     (cl-pushnew '(tsx
