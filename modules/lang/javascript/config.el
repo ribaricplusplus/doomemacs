@@ -37,11 +37,14 @@
 
 ;; TODO: Use js-ts-mode for regular JavaScript and tsx-ts-mode for JSX
 
+;; Make sure that treesitter grammar gets installed with set-tree-sitter! and that fallbacks are provided.
+
 (use-package! typescript-ts-mode
   :defer t
   :hook (typescript-ts-mode . rainbow-delimiters-mode)
   :config
   (set-repl-handler! 'typescript-ts-mode #'+javascript/open-repl)
+  (set-tree-sitter! 'typescript-mode 'typescript-ts-mode 'typescript)
   )
 
 (use-package! tsx-ts-mode
