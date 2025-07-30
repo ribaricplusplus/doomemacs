@@ -38,26 +38,22 @@
 ;; TODO: Use js-ts-mode for regular JavaScript and tsx-ts-mode for JSX
 
 ;; Make sure that treesitter grammar gets installed with set-tree-sitter! and that fallbacks are provided.
+;;
+
+(defun +javascript-common-config (mode)
+  (when (modulep! +lsp)
+    (add-hook (intern (format "%s-local-vars-hook" mode)) #'lsp! 'append))
+  (set-repl-handler! 'mode #'+javascript/open-repl))
 
 (use-package! typescript-ts-mode
-  :defer t
-  :hook (typescript-ts-mode . rainbow-delimiters-mode)
+  :when (modulep! +tree-sitter)
+  :when (fboundp 'typescript-ts-mode)
   :config
-  (set-repl-handler! 'typescript-ts-mode #'+javascript/open-repl)
-  (set-tree-sitter! 'typescript-mode 'typescript-ts-mode 'typescript)
-  )
+  (+javascript-common-config 'typescript-ts-mode)
+  (set-tree-sitter! 'typescript-mode 'typescript-ts-mode 'typescript))
 
 (use-package! tsx-ts-mode
-  :defer t
-  :hook (tsx-ts-mode . rainbow-delimiters-mode)
+  :when (modulep! +tree-sitter)
+  :when (fboundp 'tsx-ts-mode)
   :config
-  (set-repl-handler! 'tsx-ts-mode #'+javascript/open-repl)
-  )
-
-(when (modulep! +lsp)
-  (add-hook! '(typescript-ts-mode-hook tsx-ts-mode-hook js-ts-mode-hook) #'lsp!))
-
-;;
-;;; Tools
-
-;; TODO: Configure support for npm mode
+  (+javascript-common-config 'tsx-ts-mode))
