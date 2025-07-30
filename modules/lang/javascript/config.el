@@ -35,11 +35,6 @@
         ;; Other
         :yield "import"))))
 
-;; TODO: Use js-ts-mode for regular JavaScript and tsx-ts-mode for JSX
-
-;; Make sure that treesitter grammar gets installed with set-tree-sitter! and that fallbacks are provided.
-;;
-
 (defun +javascript-common-config (mode &optional ts-symbol)
   (when (modulep! +lsp)
     (add-hook (intern (format "%s-local-vars-hook" mode)) #'lsp! 'append))
