@@ -85,7 +85,6 @@
   :mode ("\\.jsx\\'" . tsx-ts-mode)
   :init
   ;; This hook is not defined automatically so we define it here.
-  (message "Hello world from tsx")
   (+javascript-common-config 'tsx-ts-mode 'tsx)
   (with-eval-after-load 'treesit
     (cl-pushnew '(tsx
