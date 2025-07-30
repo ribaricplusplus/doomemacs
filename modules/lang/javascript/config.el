@@ -64,6 +64,7 @@
 (use-package! typescript-ts-mode
   :defer t
   :when (modulep! +tree-sitter)
+  :mode ("\\.ts\\'" . typescript-ts-mode)
   :init
   (+javascript-common-config 'typescript-ts-mode 'typescript)
   (with-eval-after-load 'treesit
