@@ -65,14 +65,15 @@
   :defer t
   :when (modulep! +tree-sitter)
   :init
-  (cl-pushnew '(typescript
-                "https://github.com/tree-sitter/tree-sitter-typescript"
-                "master"
-                "typescript/src"
-                nil
-                nil)
-              treesit-language-source-alist :test #'eq :key #'car)
-  (+javascript-common-config 'typescript-ts-mode 'typescript))
+  (+javascript-common-config 'typescript-ts-mode 'typescript)
+  (with-eval-after-load 'treesit
+    (cl-pushnew '(typescript
+                  "https://github.com/tree-sitter/tree-sitter-typescript"
+                  "master"
+                  "typescript/src"
+                  nil
+                  nil)
+                treesit-language-source-alist :test #'eq :key #'car)))
 
 (use-package! tsx-ts-mode
   :defer t
@@ -80,11 +81,12 @@
   :init
   ;; This hook is not defined automatically so we define it here.
   (message "Hello world from tsx")
-  (cl-pushnew '(tsx
-                "https://github.com/tree-sitter/tree-sitter-typescript"
-                "master"
-                "tsx/src"
-                nil
-                nil)
-              treesit-language-source-alist :test #'eq :key #'car)
-  (+javascript-common-config 'tsx-ts-mode 'tsx))
+  (+javascript-common-config 'tsx-ts-mode 'tsx)
+  (with-eval-after-load 'treesit
+    (cl-pushnew '(tsx
+                  "https://github.com/tree-sitter/tree-sitter-typescript"
+                  "master"
+                  "tsx/src"
+                  nil
+                  nil)
+                treesit-language-source-alist :test #'eq :key #'car)))
