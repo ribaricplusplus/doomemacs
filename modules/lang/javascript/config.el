@@ -36,21 +36,23 @@
         :yield "import"))))
 
 (defun +javascript-common-config (mode &optional ts-symbol)
-  (when (modulep! +lsp)
-    (add-hook (intern (format "%s-local-vars-hook" mode)) #'lsp! 'append))
-  (set-repl-handler! mode #'+javascript/open-repl)
-  (when ts-symbol
-    (treesit-ensure-installed ts-symbol)))
+  (let ((mode-vars-hook (intern (format "%s-local-vars-hook" mode))))
+    (when (modulep! +lsp)
+      (add-hook mode-vars-hook #'lsp! 'append))
+    (set-repl-handler! mode #'+javascript/open-repl)
+    (when ts-symbol
+      (treesit-ensure-installed ts-symbol))
+    ))
 
 (use-package! js-mode
   :defer t
-  :config
+  :init
   (+javascript-common-config 'js-mode))
 
 (use-package! js-ts-mode
   :defer t
   :when (modulep! +tree-sitter)
-  :config
+  :init
   (set-tree-sitter!
       'js-mode
       'js-ts-mode
@@ -60,8 +62,9 @@
   (+javascript-common-config 'js-ts-mode))
 
 (use-package! typescript-ts-mode
+  :defer t
   :when (modulep! +tree-sitter)
-  :config
+  :init
   (cl-pushnew '(typescript
                 "https://github.com/tree-sitter/tree-sitter-typescript"
                 "master"
@@ -72,8 +75,11 @@
   (+javascript-common-config 'typescript-ts-mode 'typescript))
 
 (use-package! tsx-ts-mode
+  :defer t
   :when (modulep! +tree-sitter)
-  :config
+  :init
+  ;; This hook is not defined automatically so we define it here.
+  (message "Hello world from tsx")
   (cl-pushnew '(tsx
                 "https://github.com/tree-sitter/tree-sitter-typescript"
                 "master"
@@ -81,5 +87,4 @@
                 nil
                 nil)
               treesit-language-source-alist :test #'eq :key #'car)
-  (+javascript-common-config 'tsx-ts-mode 'tsx)
-  (treesit-ensure-installed 'tsx))
+  (+javascript-common-config 'tsx-ts-mode 'tsx))
