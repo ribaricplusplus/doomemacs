@@ -50,6 +50,7 @@
 (use-package! js-ts-mode
   :defer t
   :when (modulep! +tree-sitter)
+  :config
   (set-tree-sitter!
       'js-mode
       'js-ts-mode
