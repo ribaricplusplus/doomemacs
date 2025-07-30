@@ -11,11 +11,18 @@
   ;; HACK: treesit lacks any way to dictate where to install grammars.
   (add-to-list 'treesit-extra-load-path (concat doom-profile-data-dir "tree-sitter"))
   (defadvice! +tree-sitter--install-grammar-to-local-dir-a (fn &rest args)
-    "Write grammars to `doom-profile-data-dir'."
-    :around #'treesit-install-language-grammar
-    :around #'treesit--build-grammar
-    (let ((user-emacs-directory doom-profile-data-dir))
-      (apply fn args)))
+  "Write grammars to `doom-profile-data-dir'."
+  :around #'treesit-install-language-grammar
+  :around #'treesit--build-grammar
+  (let* ((lang (car args))
+         (out-dir (cadr args))
+         (default-out-dir (concat doom-profile-data-dir "tree-sitter")))
+    (if (eq out-dir 'interactive)
+        ;; Handle interactive case - provide our directory instead of prompting
+        (funcall fn lang default-out-dir)
+      ;; Handle non-interactive case
+      (let ((user-emacs-directory doom-profile-data-dir))
+        (apply fn args)))))
 
   ;; HACK: Some *-ts-mode packages modify `major-mode-remap-defaults'
   ;;   inconsistently. Playing whack-a-mole to undo those changes is more hassle

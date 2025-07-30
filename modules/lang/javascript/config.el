@@ -35,12 +35,13 @@
         ;; Other
         :yield "import"))))
 
+;; TODO: Use js-ts-mode for regular JavaScript and tsx-ts-mode for JSX
+
 (use-package! typescript-ts-mode
   :defer t
   :hook (typescript-ts-mode . rainbow-delimiters-mode)
   :config
   (set-repl-handler! 'typescript-ts-mode #'+javascript/open-repl)
-  (set-electric! 'typescript-ts-mode :chars '(?\} ?\) ?. ?:))
   )
 
 (use-package! tsx-ts-mode
@@ -48,65 +49,12 @@
   :hook (tsx-ts-mode . rainbow-delimiters-mode)
   :config
   (set-repl-handler! 'tsx-ts-mode #'+javascript/open-repl)
-  (set-electric! 'tsx-ts-mode :chars '(?\} ?\) ?. ?:))
   )
 
 (when (modulep! +lsp)
-  (add-hook! '(typescript-ts-mode-hook tsx-ts-mode-hook) #'lsp!)
+  (add-hook! '(typescript-ts-mode-hook tsx-ts-mode-hook js-ts-mode-hook) #'lsp!))
 
 ;;
 ;;; Tools
 
-;;;###package skewer-mode
-(map! :localleader
-      (:after js2-mode
-        :map js2-mode-map
-        "S" #'+javascript/skewer-this-buffer
-        :prefix ("s" . "skewer"))
-      :prefix "s"
-      (:after skewer-mode
-        :map skewer-mode-map
-        "E" #'skewer-eval-last-expression
-        "e" #'skewer-eval-defun
-        "f" #'skewer-load-buffer)
-
-      (:after skewer-css
-        :map skewer-css-mode-map
-        "e" #'skewer-css-eval-current-declaration
-        "r" #'skewer-css-eval-current-rule
-        "b" #'skewer-css-eval-buffer
-        "c" #'skewer-css-clear-all)
-
-      (:after skewer-html
-        :map skewer-html-mode-map
-        "e" #'skewer-html-eval-tag))
-
-
-(use-package! npm-mode
-  :hook ((js-mode typescript-mode) . npm-mode)
-  :config
-  (map! :localleader
-        (:map npm-mode-keymap
-          "n" npm-mode-command-keymap)
-        (:after js2-mode
-          :map js2-mode-map
-          :prefix ("n" . "npm"))))
-
-
-;;
-;;; Projects
-
-(def-project-mode! +javascript-npm-mode
-  :modes '(html-mode
-           css-mode
-           web-mode
-           markdown-mode
-           typescript-ts-mode
-           tsx-ts-mode
-           json-mode
-           solidity-mode)
-  :when (locate-dominating-file default-directory "package.json")
-  :add-hooks '(+javascript-add-npm-path-h npm-mode))
-
-(def-project-mode! +javascript-gulp-mode
-  :when (locate-dominating-file default-directory "gulpfile.js"))
+;; TODO: Configure support for npm mode
