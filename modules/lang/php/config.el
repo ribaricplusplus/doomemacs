@@ -61,7 +61,7 @@
       (add-hook mode-vars-hook #'lsp! 'append))
 
     (map! :localleader
-          :map ,mode-map
+          :map mode-map
           :prefix ("t" . "test")
           "r" #'phpunit-current-project
           "a" #'phpunit-current-class
